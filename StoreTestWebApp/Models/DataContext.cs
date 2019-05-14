@@ -18,5 +18,11 @@ namespace StoreTestWebApp.Models
         public DbSet<Order> orders { get; set; }
         public DbSet<Client> clients { get; set; }
 
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+        }
+
+        public System.Data.Entity.DbSet<StoreTestWebApp.Models.ProductOrders> ProductOrders { get; set; }
     }
 }

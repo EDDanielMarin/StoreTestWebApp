@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -16,6 +17,10 @@ namespace StoreTestWebApp.Models
         [Required]
         [Display(Name="Precio del Producto")]
         public decimal Price { get; set; }
+
+        [Display(Name = "Stock")]
+        public int Stock { get; set; }
+
 
 
     }
