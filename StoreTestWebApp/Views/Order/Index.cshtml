@@ -1,0 +1,38 @@
+﻿@model List<StoreTestWebApp.Models.Order>
+    @{
+        ViewBag.Title = "Ordenes";
+    }
+    <div class="jumbotron">
+        <h1>Listado de ordenes</h1>
+    </div>
+    <h2 class="page-header">
+        <a class="btn btn-primary pull-right" href="~/Order/Registrar">Nuevo comprobante</a>
+        Ordenes
+    </h2>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                
+                <th style="width:140px">Numero</th>
+                <th style="width:140px">Total</th>
+                <th style="width:140px">Creado</th>
+                <th style="width:140px">Opcion</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in Model)
+            {
+                <tr>
+
+                   
+                    <td class="text-right">@string.Format("{0,22:D8}", m.OrderID)</td>
+                    <td class="text-right">@string.Format("{0:c}", m.TotalOrder)</td>
+                    <td class="text-right">@m.Date.ToString("dd-MM-yyyy")</td>
+                    <td>
+                        @Html.ActionLink("Ver detalle", "detalle", new { id = m.OrderID })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>

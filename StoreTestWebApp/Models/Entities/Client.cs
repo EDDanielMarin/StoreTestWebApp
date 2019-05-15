@@ -18,11 +18,6 @@ namespace StoreTestWebApp.Models
         [Required]
         [Display(Name = "Apellido del Cliente")]
         public string LastName { get; set; }
-
-        public string NameFull
-        {
-            get { return FirstName + " " + LastName; }
-        }
         [Display(Name = "Cliente")]
         public string Fullname => string.Format("{0} {1}", FirstName, LastName);
 

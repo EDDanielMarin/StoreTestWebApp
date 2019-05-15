@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" type="text/css" rel="stylesheet"/>
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script>
+           $(document).ready(function () {
+               ClearProducToAdd();
+
+
+               $(".btn-remove").click(function () {
+                   if (confirm('¿Está seguro de retirar el item seleccionado?')) {
+                       $(this).closest('.list-group-item').find('.remove').val("True");
+                       return true;
+                   }
+
+                   return false;
+               })
+               /* Autocomplete, jquery UI */
+
+
+
+               $("#nameComp").autocomplete({
+                   dataType: 'JSON',
+                   source: function (request, response) {
+                       jQuery.ajax({
+                           url: '/Order/FindClient',
+                           type: "post",
+                           dataType: "json",
+                           data: {
+                               name: request.term
+                           },
+                           success: function (data) {
+                               response($.map(data, function (item) {
+                                   console.log(item
+                                   )
+                                   return {
+                                       id: item.ClientId,
+                                       value: item.Fullname,
+                                   }
+                               }))
+                           }
+                       })
+                   },
+                   select: function (e, ui) {
+                       $("#ClientId").val(ui.item.ClientId);
+                       $("#ClientName").val(ui.item.Fullname);
+                   }
+               });
+
+
+               $("#productCompl").autocomplete({
+                   dataType: 'JSON',
+                   source: function (request, response) {
+                       console.log('request')
+                       jQuery.ajax({
+                           url: '/Order/FindProduct',
+                           type: "post",
+                           dataType: "json",
+                           data: {
+                               name: request.term
+                           },
+                           success: function (data) {
+                               response($.map(data, function (item) {
+                                   console.log(item
+                                   )
+                                   return {
+                                       id: item.ProductId,
+                                       value: item.Name,
+                                       price: item.Price,
+                                       stock: item.Stock
+                                   }
+                               }))
+                           }
+                       })
+                   },
+                   select: function (e, ui) {
+                       $("#ProductIdSel").val(ui.item.id);
+                       $("#ProductPrice").val(ui.item.price);
+                       $("#ProductQuanty").focus();
+                   }
+               })
+           })
+
+           function ClearProducToAdd() {
+               $("#ProductIdSel").val("");
+               $("#productCompl").val("");
+               $("#ProductPrice").val("0");
+               $("#ProductQuanty").val(1);
+           }
+    </script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+</body>
+</html>

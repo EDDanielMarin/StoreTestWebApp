@@ -1,0 +1,105 @@
+﻿@model StoreTestWebApp.Models.OrderViewModel
+@{
+    ViewBag.Title = "Registrar";
+}
+<h2 class="page-header">Nueva Orden</h2>
+@using (Html.BeginForm("Registrar", "Order", FormMethod.Post, new { id = "frm-order" }))
+{
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form-group">
+
+                @Html.HiddenFor(x => x.ClientId)
+                @Html.TextBoxFor(x => x.ClienteName, new { @class = "form-control", placeholder = "Ingrese el nombre del cliente" , id = "nameComp"})
+                @Html.ValidationMessage("Cliente", null, new { @class = "label label-danger" })
+            </div>
+            <div class="well well-sm">
+                <div class="row">
+                    <div class="col-xs-7">
+                        @Html.HiddenFor(x => x.ProductIdSel)
+                        @Html.TextBoxFor(x => x.ProductNameSel, new { @class = "form-control", placeholder = "Buscar producto", id = "productCompl" })
+                        @Html.ValidationMessage("producto_agregar", null, new { @class = "label label-danger" })
+                    </div>
+                    <div class="col-xs-2">
+                        @Html.TextBoxFor(x => x.ProductQuanty, new { @class = "form-control", placeholder = "Cantidad" })
+                    </div>
+                    <div class="col-xs-2">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">S/.</span>
+                            @Html.TextBoxFor(x => x.ProductPrice, new { @class = "form-control", placeholder = "Precio" })
+                        </div>
+                    </div>
+                    <div class="col-xs-1">
+                        <button class="btn btn-primary" type="submit" value="agregar_producto" name="action">
+                            <i class="glyphicon glyphicon-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <ul id="facturador-detalle" class="list-group">
+                @if (Model.OrderDetails.Count > 0)
+                {
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-xs-1"></div>
+                            <div class="col-xs-5">
+                                <b>Producto</b>
+                            </div>
+                            <div class="col-xs-2 text-center">
+                                <b>Cantidad</b>
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                <b>Precio Unitario</b>
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                <b>Monto</b>
+                            </div>
+                        </div>
+                    </li>
+                }
+                @foreach (var d in Model.OrderDetails)
+                {
+                    var i = Model.OrderDetails.IndexOf(d);
+                    <li class="list-group-item">
+                        <!-- Modelo -->
+                        @Html.Hidden("OrderDetails[" + i + "].ProductId", d.ProductId)
+                        @Html.Hidden("OrderDetails[" + i + "].ProductName", d.ProductName)
+                        @Html.Hidden("OrderDetails[" + i + "].UnitPrice", d.UnitPrice)
+                        @Html.Hidden("OrderDetails[" + i + "].Quanty", d.Quanty)
+                        @Html.Hidden("OrderDetails[" + i + "].Remove", d.Remove, new { @class = "remove" })
+                        <div class="row">
+                            <div class="col-xs-1 text-right">
+                                <button class="btn btn-danger btn-xs btn-block btn-retirar" type="submit" value="retirar_producto" name="action">
+                                    <i class="glyphicon glyphicon-remove"></i>
+                                </button>
+                            </div>
+                            <div class="col-xs-5">
+                                @d.ProductName
+                            </div>
+                            <div class="col-xs-2 text-center">
+                                @d.Quanty
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                @string.Format("{0:c}", d.UnitPrice)
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                @string.Format("{0:c}", d.Total())
+                            </div>
+                        </div>
+                    </li>
+                }
+                @if (Model.OrderDetails.Count > 0)
+                {
+                    <li class="list-group-item text-right" style="font-size:18px;">
+                        @string.Format("{0:c}", Model.Total())
+                    </li>
+                }
+            </ul>
+            @if (Model.OrderDetails.Count > 0)
+            {
+                <button class="btn btn-primary btn-block btn-lg" type="submit" value="generar" name="action">Guardar Orden</button>
+            }
+        </div>
+    </div>
+}

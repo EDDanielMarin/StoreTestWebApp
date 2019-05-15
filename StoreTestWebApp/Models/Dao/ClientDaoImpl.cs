@@ -7,12 +7,17 @@ namespace StoreTestWebApp.Models.Dao
 {
     public class ClientDaoImpl : Dao<Client>
     {
+        public bool Create(Client obj)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Client> FindList(string contains)
         {
             using (var context = new DataContext())
             {
                 List<Client> list = new List<Client>();
-                list = contains == "" ? context.clients.ToList() : context.clients.Where(x => x.Fullname == contains).ToList();
+                list = contains == "" ? context.clients.ToList() : context.clients.Where(x => x.FirstName.Contains(contains) || x.LastName.Contains(contains)).ToList();
                 return list;
             }
         }
@@ -21,7 +26,7 @@ namespace StoreTestWebApp.Models.Dao
         {
             using (var context = new DataContext())
             {
-                var client = context.clients.Where(x => x.ClientId.ToString() == id).SingleOrDefault();
+                var client = context.clients.Where(x => x.ClientId.ToString()==id).SingleOrDefault();
                 return client;
 
             }
