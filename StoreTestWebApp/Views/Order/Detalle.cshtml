@@ -1,13 +1,16 @@
 ﻿@model  StoreTestWebApp.Models.Order
 @{
-    ViewBag.Title = "Comprobante #" + Model.OrderID;
+    ViewBag.Title = "Orden #" + string.Format("{0,22:D8}", Model.OrderID.ToString());
 }
-<h2 class="page-header">Comprobante #   @string.Format("{0,22:D8}", Model.OrderID.ToString())</h2>
+<h2 class="page-header">Order #   @string.Format("{0,22:D8}", Model.OrderID.ToString())</h2>
 <div class="row">
     <div class="col-xs-12">
+        
+        @Html.HiddenFor(x => x.OrderID, new { id = "OrderID" })
+
         <ul id="facturador-detalle" class="list-group">
             <li class="list-group-item">
-                <h3>@Model.Client.FirstName</h3>
+                <h3>@Model.Client.Fullname</h3>
             </li>
             <li class="list-group-item">
                 <div class="row">
@@ -51,5 +54,15 @@
                 </li>
             }
         </ul>
+
+
+    </div>
+</div>
+<div class="row">
+
+    <div class="col-xs-1 text-right">
+        <button class="btn btn-danger btn-xs btn-block btn-eliminar" type="submit" value="eliminar" name="action">
+            <i class="glyphicon glyphicon-remove"></i>
+        </button>
     </div>
 </div>

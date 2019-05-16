@@ -22,7 +22,7 @@ namespace StoreTestWebApp.Models.Dao
             }
         }
 
-        public Product FindObject(string id)
+        public  Product FindObject(string id)
         {
             using (var context = new DataContext())
             {
@@ -30,6 +30,11 @@ namespace StoreTestWebApp.Models.Dao
                 return product;
                 
             }
+        }
+
+        public bool Delete(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

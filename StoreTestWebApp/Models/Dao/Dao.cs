@@ -10,5 +10,6 @@ namespace StoreTestWebApp.Models.Dao
         T FindObject(string id);
         List<T> FindList(string contains);
         bool Create(T obj);
+        bool Delete(int id);
     }
 }

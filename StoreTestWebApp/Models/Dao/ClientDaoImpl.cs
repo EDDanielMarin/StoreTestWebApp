@@ -31,5 +31,10 @@ namespace StoreTestWebApp.Models.Dao
 
             }
         }
+
+        public bool Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

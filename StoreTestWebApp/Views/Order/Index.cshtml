@@ -6,7 +6,7 @@
         <h1>Listado de ordenes</h1>
     </div>
     <h2 class="page-header">
-        <a class="btn btn-primary pull-right" href="~/Order/Registrar">Nuevo comprobante</a>
+        <a class="btn btn-primary pull-right" href="~/Order/Registrar">Agregar Orden</a>
         Ordenes
     </h2>
     <table class="table table-bordered table-striped">
@@ -16,7 +16,7 @@
                 <th style="width:140px">Numero</th>
                 <th style="width:140px">Total</th>
                 <th style="width:140px">Creado</th>
-                <th style="width:140px">Opcion</th>
+                <th style="width:140px">Detalle</th>
 
             </tr>
         </thead>
@@ -30,7 +30,7 @@
                     <td class="text-right">@string.Format("{0:c}", m.TotalOrder)</td>
                     <td class="text-right">@m.Date.ToString("dd-MM-yyyy")</td>
                     <td>
-                        @Html.ActionLink("Ver detalle", "detalle", new { id = m.OrderID })
+                        @Html.ActionLink(m.Client.Fullname, "detalle", new { id = m.OrderID })
                     </td>
                 </tr>
             }

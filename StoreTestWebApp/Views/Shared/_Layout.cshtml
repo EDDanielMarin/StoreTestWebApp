@@ -43,13 +43,44 @@
                ClearProducToAdd();
 
 
-               $(".btn-remove").click(function () {
+               $(".btn-retirar").click(function () {
                    if (confirm('¿Está seguro de retirar el item seleccionado?')) {
                        $(this).closest('.list-group-item').find('.remove').val("True");
                        return true;
                    }
 
                    return false;
+               })
+
+               $(".btn-eliminar").click(function () {
+                   var OrdId = $('#OrderID').val();
+                   if (confirm('¿Está seguro de eliminar orden?')) {
+                       if (OrdId)
+                       {
+                           jQuery.ajax({
+                               url: '/Order/RemoveOrder',
+                               type: "get",
+                               dataType: "json",
+                               data: {
+                                   id: OrdId
+                               },
+                               success: function (data) {
+                                   alert(data)
+                                   console.log(data)
+                                   window.location.href = "~/Order";
+                               },
+                               error: function (data) {
+                                   console.log(data)
+                                   window.location.href = "/";
+
+                               }
+                           })
+                       }
+                       else
+                       {
+                           alert('Producto no encontrado')
+                       }
+                                          }
                })
                /* Autocomplete, jquery UI */
 
@@ -67,8 +98,6 @@
                            },
                            success: function (data) {
                                response($.map(data, function (item) {
-                                   console.log(item
-                                   )
                                    return {
                                        id: item.ClientId,
                                        value: item.Fullname,
@@ -78,7 +107,8 @@
                        })
                    },
                    select: function (e, ui) {
-                       $("#ClientId").val(ui.item.ClientId);
+                       console.log(ui.item)
+                       $("#ClientId").val(ui.item.id);
                        $("#ClientName").val(ui.item.Fullname);
                    }
                });

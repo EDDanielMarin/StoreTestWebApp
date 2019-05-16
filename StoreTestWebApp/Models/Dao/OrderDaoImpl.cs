@@ -15,22 +15,31 @@ namespace StoreTestWebApp.Models.Dao
 
 
                 List<Order> list = new List<Order>();
-                list = contains == "" ? context.orders.OrderByDescending(x => x.Date).ToList() :
+
+                list = contains == "" ?
                     context.orders
-                    .Include(x =>x.Details.Select(y => y.Product))
                     .Include(x => x.Client)
+                    .Include(x => x.Details.Select(y => y.Product)).ToList()
+                :
+                   context.orders
+                    .Include(x => x.Client)
+                    .Include(x => x.Details.Select(y => y.Product))
                     .Where(x => x.Client.Fullname.Contains(contains)).ToList();
+
                 return list;
 
 
             }
         }
 
-        public Order FindObject(string id)
+        public  Order FindObject(string id)
         {
             using (var context = new DataContext())
             {
-                return context.orders.Include(x => x.Details.Select(y => y.Product)).Where(x => x.OrderID.ToString() == id).SingleOrDefault();
+                return context.orders
+                    .Include(x => x.Client)
+                    .Include(x => x.Details.Select(y => y.Product))
+                    .Where(x => x.OrderID.ToString() == id).SingleOrDefault();
 
             }
         }
@@ -41,7 +50,10 @@ namespace StoreTestWebApp.Models.Dao
             {
                 using (var context = new DataContext())
                 {
-                    context.Entry(order).State = EntityState.Added;
+                    context.clients.Attach(order.Client);
+                    foreach (ProductOrders x in order.Details)
+                        context.products.Attach(x.Product);
+                   context.Entry(order).State = EntityState.Added;
                     context.SaveChanges();
                 }
             }
@@ -53,5 +65,25 @@ namespace StoreTestWebApp.Models.Dao
             return true;
         }
 
+        public bool Delete(int id)
+        {
+            try
+            {
+                using (var context = new DataContext())
+                {
+                    var ord = context.orders.Single(a => a.OrderID == id);
+                    foreach (ProductOrders x in ord.Details)
+                        context.ProductOrders.Attach(x);
+                    context.orders.Remove(ord);
+                    context.SaveChanges();
+
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
     }
 }

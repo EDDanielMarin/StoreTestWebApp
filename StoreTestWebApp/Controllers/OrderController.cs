@@ -32,12 +32,16 @@ namespace StoreTestWebApp.Controllers
             return View(new OrderViewModel());
         }
 
+        public bool RemoveOrder(int id)
+        {
+            return id > 0 ? ord.Delete(id):false ;
+        }
         [HttpPost]
         public ActionResult Registrar(OrderViewModel model, string action)
         {
             if (action == "generar")
             {
-                if (!string.IsNullOrEmpty(model.ClientId.ToString()))
+                if (model.ClientId > 0)
                 {
                     if (ord.Create(model.ToModel()))
                     {
