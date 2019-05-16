@@ -13,8 +13,8 @@ namespace StoreTestWebApp.Models
         #region Cabecera
         public int ClientId { get; set; }
         public string ClienteName { get; set; }
-        public int ProductId { get; set; }
-        public string ProductName { get; set; }
+        public int ProductIdSel { get; set; }
+        public string ProductNameSel { get; set; }
         public int ProductQuanty { get; set; }
         public decimal ProductPrice { get; set; }
         #endregion
@@ -39,15 +39,15 @@ namespace StoreTestWebApp.Models
 
         public void Refresh()
         {
-            ProductId = 0;
-            ProductName = null;
+            ProductIdSel = 0;
+            ProductNameSel = null;
             ProductQuanty = 1;
             ProductPrice = 0;
         }
 
-        public bool AddValidProduct()
+        public bool IsValidProduct()
         {
-            return !(ProductId == 0 || string.IsNullOrEmpty(ProductName) || ProductQuanty == 0 || ProductPrice == 0);
+            return !(ProductIdSel == 0 || string.IsNullOrEmpty(ProductNameSel) || ProductQuanty == 0 || ProductPrice == 0);
         }
 
         public bool ExistInDetail(int ProductId)
@@ -55,7 +55,7 @@ namespace StoreTestWebApp.Models
             return OrderDetails.Any(x => x.ProductId == ProductId);
         }
 
-        public void RetirarItemDeDetalle()
+        public void RemoveDetailItem()
         {
             if (OrderDetails.Count > 0)
             {
@@ -69,10 +69,10 @@ namespace StoreTestWebApp.Models
         {
             OrderDetails.Add(new ProductOrderViewModel
             {
-                ProductId = this.ProductId,
-                ProductName = this.ProductName,
-                UnitPrice = this.ProductPrice,
-                Quanty = this.ProductQuanty,
+                ProductId = ProductIdSel,
+                ProductName = ProductNameSel,
+                UnitPrice = ProductPrice,
+                Quanty = ProductQuanty,
             });
 
             Refresh();
@@ -85,6 +85,7 @@ namespace StoreTestWebApp.Models
             order.Client = (new ClientDaoImpl()).FindObject(ClientId.ToString());
             order.Date = DateTime.Now;
             order.TotalOrder = this.Total();
+            order.Details = new List<ProductOrders>();
 
             foreach (var i in OrderDetails)
             {

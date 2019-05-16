@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace StoreTestWebApp.Models
+namespace StoreTestWebApp.Models.Dao
 {
     public class ProductDaoImpl : Dao<Product>
     {
+        public bool Create(Product obj)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Product> FindList(string contains)
         {
             using (var context = new DataContext())
@@ -17,7 +22,7 @@ namespace StoreTestWebApp.Models
             }
         }
 
-        public Product FindObject(string id)
+        public  Product FindObject(string id)
         {
             using (var context = new DataContext())
             {
@@ -25,6 +30,11 @@ namespace StoreTestWebApp.Models
                 return product;
                 
             }
+        }
+
+        public bool Delete(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
